@@ -11,7 +11,7 @@ function publicURL(){const u=new URL(location.href);u.searchParams.set('stress',
 const SUPABASE_URL='https://bswocfbctideegemcpkb.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzd29jZmJjdGlkZWVnZW1jcGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1MjU3NDIsImV4cCI6MjEwMjEwMTc0Mn0.eh81_vT-Lci_ldK6v4wNxv60xOu_h2Z-tpHcduC_glc';
 let inboxRows=[];
-let adminAccessToken=sessionStorage.getItem('numed_access_token')||'';
+let adminAccessToken=localStorage.getItem('numed_access_token')||'';
 function sbHeaders(extra={}){return {'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json',...extra}}
 async function insertEvaluation(r){
  const payload={nombre:r.first,apellido:r.last,cedula:r.idNumber,fecha_nacimiento:r.birthDate,edad:Number(r.age),celular:r.phone,...r.answers,puntaje:r.score,resultado:r.level,estado:'Realizado'};
@@ -31,15 +31,35 @@ async function adminLogin(){
  const res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
  const data=await res.json();
  if(!res.ok||!data.access_token){alert('No se pudo iniciar sesión. Verifica el correo y la contraseña del usuario creado en Supabase Authentication.');return;}
- adminAccessToken=data.access_token;sessionStorage.setItem('numed_access_token',adminAccessToken);await renderInbox();
+ adminAccessToken=data.access_token;localStorage.setItem('numed_access_token',adminAccessToken);await renderInbox();
 }
-function adminLogout(){adminAccessToken='';sessionStorage.removeItem('numed_access_token');renderInbox();}
+function adminLogout(){adminAccessToken='';localStorage.removeItem('numed_access_token');renderInbox();}
 function normalizeDb(r){return {id:String(r.id),first:r.nombre,last:r.apellido,idNumber:r.cedula,birthDate:r.fecha_nacimiento||'',age:r.edad,phone:r.celular,answers:Object.fromEntries(Array.from({length:10},(_,i)=>['pss_'+(i+1),r['pss_'+(i+1)] ])),score:r.puntaje,level:r.resultado,createdAt:r.creado_en,status:r.estado}}
 function rows(){return inboxRows}
 function level(score){return score<=13?'Bajo':score<=26?'Moderado':'Alto'}
 function renderQR(){const u=publicURL();$('#public-url').textContent=u;$('#qr').src='https://api.qrserver.com/v1/create-qr-code/?size=420x420&data='+encodeURIComponent(u)}
-function paintInbox(data){const el=$('#inbox');const q=($('#patientSearch')?.value||'').trim().toLowerCase();const filtered=!q?data:data.filter(r=>`${r.first} ${r.last} ${r.idNumber}`.toLowerCase().includes(q));if(!filtered.length){el.innerHTML=`<div class="empty">${q?'No se encontraron pacientes con esa búsqueda.':'Todavía no hay cuestionarios recibidos.'}</div>`;return}el.innerHTML='<div class="tablewrap"><table><thead><tr><th>#</th><th>Paciente</th><th>Puntaje</th><th>Resultado</th><th>Estado</th></tr></thead><tbody>'+filtered.map(r=>{const originalIndex=inboxRows.findIndex(x=>x.id===r.id);return `<tr><td><strong>${originalIndex+1}</strong></td><td><strong>${esc(r.first)} ${esc(r.last)}</strong></td><td><strong>${r.score}/40</strong></td><td><span class="status">${r.level}</span></td><td>${esc(r.status||'Realizado')} &nbsp;<button class="pdfbtn" type="button" onclick="printResult('${r.id}')">PDF</button></td></tr>`}).join('')+'</tbody></table></div>'}
-async function renderInbox(){const el=$('#inbox');el.innerHTML='<div class="empty">Actualizando bandeja...</div>';try{const data=await fetchEvaluations();inboxRows=data.map(normalizeDb);paintInbox(inboxRows)}catch(err){console.error(err);el.innerHTML='<div class="empty"><strong>No se pudo abrir la bandeja.</strong><br>Inicia sesión/autentica el panel NUMED en Supabase para permitir SELECT. El formulario público sí puede seguir enviando respuestas si la política INSERT está activa.</div>'}}
+function paintInbox(data){const el=$('#inbox');if(adminAccessToken){el.innerHTML='<div style="display:flex;justify-content:flex-end;margin:10px 0"><button class="btn ghost" type="button" onclick="adminLogout()">Cerrar sesión</button></div>';}const q=($('#patientSearch')?.value||'').trim().toLowerCase();const filtered=!q?data:data.filter(r=>`${r.first} ${r.last} ${r.idNumber}`.toLowerCase().includes(q));if(!filtered.length){el.innerHTML=`<div class="empty">${q?'No se encontraron pacientes con esa búsqueda.':'Todavía no hay cuestionarios recibidos.'}</div>`;return}el.innerHTML+=(adminAccessToken?'':'')+'<div class="tablewrap"><table><thead><tr><th>#</th><th>Paciente</th><th>Puntaje</th><th>Resultado</th><th>Estado</th></tr></thead><tbody>'+filtered.map(r=>{const originalIndex=inboxRows.findIndex(x=>x.id===r.id);return `<tr><td><strong>${originalIndex+1}</strong></td><td><strong>${esc(r.first)} ${esc(r.last)}</strong></td><td><strong>${r.score}/40</strong></td><td><span class="status">${r.level}</span></td><td>${esc(r.status||'Realizado')} &nbsp;<button class="pdfbtn" type="button" onclick="printResult('${r.id}')">PDF</button></td></tr>`}).join('')+'</tbody></table></div>'}
+async function renderInbox(){
+ const el=$('#inbox');
+ if(!adminAccessToken){
+  el.innerHTML=`<div class="empty"><strong style="display:block;font-size:16px;color:var(--navy-900);margin-bottom:8px">Panel privado NUMED</strong><span>Inicia sesión para ver los pacientes y sus resultados.</span><div style="margin-top:16px"><button class="btn primary" type="button" onclick="adminLogin()">Iniciar sesión</button></div></div>`;
+  return;
+ }
+ el.innerHTML='<div class="empty">Actualizando bandeja...</div>';
+ try{
+  const data=await fetchEvaluations();inboxRows=data.map(normalizeDb);
+  el.insertAdjacentHTML('beforebegin','');paintInbox(inboxRows);
+  const head=$('#inbox').previousElementSibling;
+ }catch(err){
+  console.error(err);
+  if(String(err.message).includes('401')||String(err.message).includes('JWT')||String(err.message).includes('expired')){
+   adminAccessToken='';localStorage.removeItem('numed_access_token');
+   el.innerHTML=`<div class="empty"><strong>La sesión venció.</strong><br>Vuelve a iniciar sesión.<div style="margin-top:16px"><button class="btn primary" type="button" onclick="adminLogin()">Iniciar sesión</button></div></div>`;
+  }else{
+   el.innerHTML=`<div class="empty"><strong>No se pudo cargar la bandeja.</strong><br><small>${esc(err.message)}</small><div style="margin-top:16px"><button class="btn primary" type="button" onclick="adminLogin()">Volver a iniciar sesión</button></div></div>`;
+  }
+ }
+}
 
 function resultCopy(r){
  if(r.level==='Bajo') return {title:'Estrés percibido bajo',intro:'¡Felicitaciones! Su resultado indica que actualmente presenta un nivel bajo de estrés percibido. Esto significa que, en general, ha logrado afrontar adecuadamente las demandas y situaciones del último mes.',recs:['Mantener una rutina de sueño de 7 a 9 horas cada noche.','Realizar al menos 150 minutos de actividad física por semana.','Dedicar entre 5 y 10 minutos diarios a ejercicios de respiración o relajación.','Mantener una alimentación equilibrada y una adecuada hidratación.','Reservar tiempo para actividades recreativas, familiares o pasatiempos que disfrute.','Realizar pausas activas durante la jornada laboral, especialmente si permanece mucho tiempo sentado o frente a una computadora.','Continuar fortaleciendo sus relaciones sociales y buscar apoyo cuando lo necesite.'],follow:'Le recomendamos repetir esta evaluación en aproximadamente un año o antes si experimenta cambios importantes en su vida o un aumento significativo del estrés.'};
