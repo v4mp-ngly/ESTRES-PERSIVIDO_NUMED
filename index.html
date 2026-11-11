@@ -56,7 +56,7 @@ tr.is-new td{animation:newrow 2.6s var(--ease)}@keyframes newrow{0%,30%{backgrou
 .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .lv-low{background:var(--green-100);color:var(--green-700)}.lv-mid{background:var(--amber-100);color:var(--amber-700)}.lv-high{background:var(--red-100);color:var(--red-700)}
 .when{font-size:12px;color:var(--muted);white-space:nowrap}.when b{display:block;color:var(--ink);font-weight:600}
-.row-actions{display:flex;gap:6px;justify-content:flex-end}
+.row-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:nowrap}.row-actions .btn.ghost.sm{padding:8px 10px}table.inbox td:last-child{padding-left:4px;width:1%}
 .empty{text-align:center;color:var(--muted);padding:44px 16px}.empty svg{width:44px;height:44px;color:#b7c7d2;margin-bottom:8px}.empty strong{display:block;font-size:16px;color:var(--navy-900);margin-bottom:4px}
 .skel{height:52px;border-radius:10px;margin:8px 0;background:linear-gradient(90deg,#eef3f6 25%,#f7fafb 50%,#eef3f6 75%);background-size:200% 100%;animation:skel 1.2s infinite}@keyframes skel{to{background-position:-200% 0}}
 /* report */
@@ -205,6 +205,12 @@ details.privacy{margin-top:8px;font-size:12px;color:var(--muted)}details.privacy
 .btn.wa{background:#25d366;color:#04351a;box-shadow:0 12px 26px -12px rgba(37,211,102,.85)}.btn.wa:hover{background:#2fe174}.btn.wa svg{width:20px;height:20px}
 .emp-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(154,198,59,.16);border:1px solid rgba(154,198,59,.4);border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:800;color:#e3f3c0;margin-bottom:10px}
 .report-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn.wa-sm{background:#e7f9ee;color:#0b7a3b;border:1px solid #bfeccf;padding:0;width:34px;height:34px;border-radius:10px}.btn.wa-sm:hover{background:#25d366;color:#fff;border-color:#25d366}.btn.wa-sm svg{width:16px;height:16px}
+.btn.wa-sm.done{background:#efe9fb;color:#5b3fa0;border-color:#ddd2f5}
+.toast button{margin-left:8px;background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:5px 11px;font-weight:800;font-size:12px;cursor:pointer}.toast button:hover{background:rgba(255,255,255,.26)}
+.toast.hi i{background:#ff7a6b}
+.btn.alerts-on{background:var(--green-100);color:var(--green-700);border-color:#d3e6b4}
+.kpi.click{cursor:pointer;transition:transform .15s,border-color .2s}.kpi.click:hover{transform:translateY(-2px);border-color:#cfdde6}.kpi.todo strong{color:#9a5f0c}
 .fu-states .on.seg-Pendiente{background:#fff4e0;color:#9a5f0c}.fu-states .on.seg-Contactado{background:#e4effa;color:#1c587f}.fu-states .on.seg-Enviado{background:#efe9fb;color:#5b3fa0}.fu-states .on.seg-Cerrado{background:#eaeef1;color:#4f6272}
 .toolbar .search{flex:1 1 100%}.toolbar select{flex:1 1 150px}
 /* responsive */
@@ -226,7 +232,7 @@ details.privacy{margin-top:8px;font-size:12px;color:var(--muted)}details.privacy
 <div class="btn-row"><button class="btn ghost sm" id="preview" type="button">Probar formulario</button></div>
 <div class="screen-cta"><strong>Pantalla de captación</strong><p>QR animado a pantalla completa para TV o monitor en recepción.</p><button class="btn sm" id="openScreen" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Abrir modo pantalla</button></div>
 <p style="font-size:10.5px;color:var(--muted);margin:14px 0 0">Las respuestas se guardan de forma centralizada en Supabase. Consultar datos individuales requiere una sesión autenticada de NUMED.</p></aside>
-<section class="card"><div class="card-head"><div><h3>Bandeja de pacientes</h3><div class="inbox-sub" id="inboxSub">Personas que completaron Estrés Percibido.</div></div><div style="display:flex;gap:8px"><button class="btn ghost sm" id="exportCsv" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Exportar</button><button class="btn ghost sm" id="refresh" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>Actualizar</button></div></div>
+<section class="card"><div class="card-head"><div><h3>Bandeja de pacientes</h3><div class="inbox-sub" id="inboxSub">Personas que completaron Estrés Percibido.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="waWebBtn" type="button" title="Abre WhatsApp Web en una pestaña fija. Inicia sesión una vez con el número de la jornada."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>WhatsApp Web</button><button class="btn ghost sm" id="alertsBtn" type="button" title="Avisos en esta computadora cuando llegue una evaluación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span id="alertsLabel">Activar avisos</span></button><button class="btn ghost sm" id="exportCsv" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Exportar</button><button class="btn ghost sm" id="refresh" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>Actualizar</button></div></div>
 <div class="toolbar"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="patientSearch" type="search" placeholder="Buscar por nombre, cédula o celular" autocomplete="off" aria-label="Buscar pacientes"></div><select id="sortBy" aria-label="Ordenar"><option value="recent">Más recientes</option><option value="scoreDesc">Puntaje: mayor primero</option><option value="scoreAsc">Puntaje: menor primero</option><option value="name">Nombre A–Z</option></select><select id="empresaFilter" aria-label="Filtrar por empresa"><option value="">Todas las empresas</option></select><select id="segFilter" aria-label="Filtrar por seguimiento"><option value="">Todo seguimiento</option><option>Pendiente</option><option>Contactado</option><option>Enviado</option><option>Cerrado</option></select></div>
 <div class="chips" id="chips" style="margin-bottom:12px"></div>
 <div id="inbox"></div></section>
@@ -277,6 +283,8 @@ const cleanEmpresa=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,60);
 const EMPRESA=cleanEmpresa(params.get('empresa'));
 // Opcional: número de WhatsApp de NUMED (con código de país, solo dígitos). Ej: '18095551234'. Si queda vacío no se muestra el botón "Hablar con NUMED".
 const NUMED_WHATSAPP='';
+// Firma de los mensajes que NUMED envía al paciente por WhatsApp
+const NUMED_FIRMA='equipo de NUMED Care';
 const SEG_STATES=['Pendiente','Contactado','Enviado','Cerrado'];
 const LV={Bajo:{cls:'lv-low',color:'#6fa21f',soft:'#eef6dc',ink:'#5b8a17'},Moderado:{cls:'lv-mid',color:'#d08a1c',soft:'#fdf1dc',ink:'#9a5f0c'},Alto:{cls:'lv-high',color:'#c94b4b',soft:'#fdeceb',ink:'#a3332b'}};
 const ICON={check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>',file:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>',inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>'};
@@ -295,7 +303,7 @@ const fmtTime=d=>new Date(d).toLocaleTimeString('es-DO',{hour:'numeric',minute:'
 function formatBirthDate(v){if(!v)return '—';const p=String(v).slice(0,10).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:esc(v)}
 function calculateAge(v){if(!v)return '';const b=new Date(v+'T00:00:00'),t=new Date();let a=t.getFullYear()-b.getFullYear();const m=t.getMonth()-b.getMonth();if(m<0||(m===0&&t.getDate()<b.getDate()))a--;return a>=0&&a<=120?a:''}
 const initials=r=>((r.first||'?')[0]+((r.last||'')[0]||'')).toUpperCase();
-function toast(msg){const t=document.createElement('div');t.className='toast';t.innerHTML='<i></i><span>'+esc(msg)+'</span>';$('#toasts').appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},3800)}
+function toast(msg,opt={}){const t=document.createElement('div');t.className='toast'+(opt.hi?' hi':'');t.innerHTML='<i></i><span>'+esc(msg)+'</span>';if(opt.action){const b=document.createElement('button');b.type='button';b.textContent=opt.action.label;b.onclick=()=>{opt.action.fn();t.remove()};t.appendChild(b)}$('#toasts').appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)},opt.ms||3800)}
 function waLink(phone){let d=String(phone||'').replace(/\D/g,'');if(d.length===10)d='1'+d;return d?'https://wa.me/'+d:''}
 
 /* ---------- QR (generado localmente, SVG) ---------- */
@@ -375,8 +383,8 @@ function ringSVG(score,color,stroke=10){const R=50-stroke/2-1,C=2*Math.PI*R,len=
 let inboxRows=[],knownIds=null,lastSync=null,pollTimer=null,loading=false;
 const ui={level:'all',sort:'recent',empresa:'',seg:''};
 const scopeRows=()=>inboxRows.filter(r=>!ui.empresa||r.empresa===ui.empresa);
-function stats(rows=scopeRows()){const total=rows.length,low=rows.filter(r=>r.level==='Bajo').length,mid=rows.filter(r=>r.level==='Moderado').length,high=rows.filter(r=>r.level==='Alto').length;const avg=total?rows.reduce((a,r)=>a+(r.score||0),0)/total:0;return {total,low,mid,high,avg,today:rows.filter(r=>isToday(r.createdAt)).length,highPct:total?high/total*100:0}}
-function renderKPIs(){const s=stats(),on=!!auth&&inboxRows.length>=0&&lastSync;const v=x=>on?x:'—';$('#kpis').innerHTML=`<div class="kpi"><small>Total evaluados</small><strong>${v(s.total)}</strong><span>histórico</span></div><div class="kpi"><small>Hoy</small><strong>${v(s.today)}</strong><span>${new Date().toLocaleDateString('es-DO',{day:'numeric',month:'short'})}</span></div><div class="kpi"><small>Puntaje medio</small><strong>${on?s.avg.toFixed(1):'—'}</strong><span>de 40 puntos</span></div><div class="kpi ${on&&s.highPct>=20?'alert':''}"><small>Estrés alto</small><strong>${on?s.highPct.toFixed(0)+'%':'—'}</strong><span>${on?s.high+' casos':'umbral 20%'}</span></div>`}
+function stats(rows=scopeRows()){const total=rows.length,low=rows.filter(r=>r.level==='Bajo').length,mid=rows.filter(r=>r.level==='Moderado').length,high=rows.filter(r=>r.level==='Alto').length;const avg=total?rows.reduce((a,r)=>a+(r.score||0),0)/total:0;const pend=rows.filter(r=>r.seg==='Pendiente');return {pending:pend.length,pendHigh:pend.filter(r=>r.level==='Alto').length,total,low,mid,high,avg,today:rows.filter(r=>isToday(r.createdAt)).length,highPct:total?high/total*100:0}}
+function renderKPIs(){const s=stats(),on=!!auth&&inboxRows.length>=0&&lastSync;const v=x=>on?x:'—';$('#kpis').innerHTML=`<div class="kpi"><small>Total evaluados</small><strong>${v(s.total)}</strong><span>histórico</span></div><div class="kpi"><small>Hoy</small><strong>${v(s.today)}</strong><span>${new Date().toLocaleDateString('es-DO',{day:'numeric',month:'short'})}</span></div><div class="kpi click todo" data-kpi="pend" title="Ver casos pendientes"><small>Por enviar</small><strong>${v(s.pending)}</strong><span>${on&&s.pendHigh?s.pendHigh+' con estrés alto':'pendientes'}</span></div><div class="kpi ${on&&s.highPct>=20?'alert':''}"><small>Estrés alto</small><strong>${on?s.highPct.toFixed(0)+'%':'—'}</strong><span>${on?s.high+' casos':'umbral 20%'}</span></div>`}
 function renderSession(){$('#sessionChip').innerHTML=auth?`<div class="session"><b>${esc(auth.email||'Sesión activa')}</b><button class="btn ghost sm" type="button" id="logoutBtn">Salir</button></div>`:`<button class="btn primary sm" type="button" id="loginBtn">Iniciar sesión</button>`;$('#logoutBtn')?.addEventListener('click',adminLogout);$('#loginBtn')?.addEventListener('click',openLogin)}
 function openLogin(){$('#loginModal').hidden=false;$('#loginError').hidden=true;setTimeout(()=>$('#loginEmail').focus(),50)}
 function closeLogin(){$('#loginModal').hidden=true}
@@ -398,7 +406,7 @@ function paintInbox(newIds=new Set()){
  for(const r of data){
   if(ui.sort==='recent'){const k=dayKey(r.createdAt);if(k!==last){last=k;html+=`<tr class="grp"><td colspan="6">${dayLabel(r.createdAt)}<span>${counts[k]}</span></td></tr>`}}
   const lv=LV[r.level]||LV.Bajo;
-  html+=`<tr class="row${newIds.has(r.id)?' is-new':''}" data-id="${esc(r.id)}"><td><div class="who"><span class="avatar" style="background:${lv.soft};color:${lv.ink}">${esc(initials(r))}</span><div><strong>${esc(r.first)} ${esc(r.last)}</strong><small>${esc(r.idNumber)}${r.empresa?`<span class="emp-tag">${esc(r.empresa)}</span>`:''}</small></div></div></td><td><div class="score-cell"><b>${r.score}<small>/40</small></b><span class="mini"><i style="width:${r.score/40*100}%;background:${lv.color}"></i></span></div></td><td><span class="badge ${lv.cls}">${esc(r.level)}</span></td><td><span class="seg seg-${r.seg}"><i></i>${r.seg}</span></td><td><div class="when"><b>${fmtTime(r.createdAt)}</b>${fmtDate(r.createdAt)}</div></td><td><div class="row-actions"><button class="btn ghost sm" type="button" data-pdf="${esc(r.id)}" title="Descargar PDF">PDF</button></div></td></tr>`;
+  html+=`<tr class="row${newIds.has(r.id)?' is-new':''}" data-id="${esc(r.id)}"><td><div class="who"><span class="avatar" style="background:${lv.soft};color:${lv.ink}">${esc(initials(r))}</span><div><strong>${esc(r.first)} ${esc(r.last)}</strong><small>${esc(r.idNumber)}${r.empresa?`<span class="emp-tag">${esc(r.empresa)}</span>`:''}</small></div></div></td><td><div class="score-cell"><b>${r.score}<small>/40</small></b><span class="mini"><i style="width:${r.score/40*100}%;background:${lv.color}"></i></span></div></td><td><span class="badge ${lv.cls}">${esc(r.level)}</span></td><td><span class="seg seg-${r.seg}"><i></i>${r.seg}</span></td><td><div class="when"><b>${fmtTime(r.createdAt)}</b>${new Date(r.createdAt).toLocaleDateString('es-DO',{day:'numeric',month:'short'})}</div></td><td><div class="row-actions"><button class="btn wa-sm${r.seg==='Enviado'||r.seg==='Cerrado'?' done':''}" type="button" data-wa="${esc(r.id)}" title="${r.seg==='Enviado'||r.seg==='Cerrado'?'Resultado ya enviado · reenviar':'Enviar resultado por WhatsApp'}" aria-label="Enviar resultado por WhatsApp">${ICON.wa}</button><button class="btn ghost sm" type="button" data-pdf="${esc(r.id)}" title="Descargar PDF">PDF</button></div></td></tr>`;
  }
  el.innerHTML=html+'</tbody></table></div>';
 }
@@ -409,7 +417,7 @@ async function loadInbox({silent=false}={}){
   const rows=await fetchEvaluations();
   const fresh=new Set();if(knownIds)rows.forEach(r=>{if(!knownIds.has(r.id))fresh.add(r.id)});
   knownIds=new Set(rows.map(r=>r.id));inboxRows=rows;lastSync=new Date();loading=false;
-  if(fresh.size){const f=rows.find(r=>fresh.has(r.id));toast(fresh.size===1?`Nuevo cuestionario: ${f.first} ${f.last} · ${f.level}`:`${fresh.size} cuestionarios nuevos recibidos`)}
+  if(fresh.size)announce(rows.filter(r=>fresh.has(r.id)));
   fillEmpresas();renderKPIs();paintInbox(fresh);renderRiskReport();startPoll();
  }catch(err){
   loading=false;console.error(err);
@@ -417,7 +425,55 @@ async function loadInbox({silent=false}={}){
   if(!silent)$('#inbox').innerHTML=`<div class="empty">${ICON.inbox}<strong>No se pudo cargar la bandeja</strong><span>Revisa la conexión e inténtalo otra vez.</span><br><small style="opacity:.7">${esc(err.message).slice(0,160)}</small><div style="margin-top:14px"><button class="btn primary sm" type="button" data-action="retry">Reintentar</button></div></div>`;
  }
 }
-function startPoll(){if(pollTimer)return;pollTimer=setInterval(()=>{if(document.visibilityState==='visible')loadInbox({silent:true})},20000)}
+function startPoll(){if(pollTimer)return;pollTimer=setInterval(()=>{if(document.visibilityState==='visible'||alertsOn())loadInbox({silent:true})},20000)}
+
+/* ---------- Avisos de nuevas evaluaciones (sin API: en esta computadora) ---------- */
+let unseen=0;const BASE_TITLE=document.title;
+const alertsOn=()=>{try{return localStorage.getItem('numed_alerts')==='1'}catch(e){return false}};
+function setAlerts(on){try{localStorage.setItem('numed_alerts',on?'1':'0')}catch(e){}paintAlertsBtn()}
+function paintAlertsBtn(){const b=$('#alertsBtn');if(!b)return;const on=alertsOn();b.classList.toggle('alerts-on',on);$('#alertsLabel').textContent=on?'Avisos activos':'Activar avisos'}
+async function toggleAlerts(){
+ if(alertsOn()){setAlerts(false);toast('Avisos desactivados');return}
+ if('Notification' in window&&Notification.permission!=='granted'){try{await Notification.requestPermission()}catch(e){}}
+ setAlerts(true);chime(false);
+ toast(('Notification' in window&&Notification.permission==='granted')?'Avisos activos: sonará y verás una notificación con cada evaluación nueva.':'Avisos activos con sonido. Permite las notificaciones del navegador para verlas aunque estés en otra ventana.',{ms:5200});
+}
+let actx=null;
+function chime(high){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const notes=high?[880,660,880]:[660,880];notes.forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.value=f;const t=actx.currentTime+i*.18;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.32);o.connect(g).connect(actx.destination);o.start(t);o.stop(t+.34)})}catch(e){}}
+function announce(list){
+ const hi=list.some(r=>r.level==='Alto'),f=list[0];
+ const msg=list.length===1?`Nueva evaluación: ${f.first} ${f.last} · ${f.level} ${f.score}/40${f.empresa?' · '+f.empresa:''}`:`${list.length} evaluaciones nuevas${hi?' · incluye estrés alto':''}`;
+ toast(msg,{hi,ms:7000,action:list.length===1?{label:'Enviar resultado',fn:()=>sendResultWA(f.id)}:null});
+ if(!alertsOn())return;
+ chime(hi);
+ if(document.visibilityState!=='visible'){unseen+=list.length;document.title=`(${unseen}) ${BASE_TITLE}`}
+ if('Notification' in window&&Notification.permission==='granted'){
+  list.slice(0,3).forEach(r=>{try{const n=new Notification(r.level==='Alto'?'Prioridad · Estrés alto':'Nueva evaluación de estrés',{body:`${r.first} ${r.last} · ${r.score}/40 · ${r.level}${r.empresa?' · '+r.empresa:''}\nToca para enviarle el resultado.`,tag:'pss-'+r.id,requireInteraction:r.level==='Alto'});n.onclick=()=>{window.focus();openDrawer(r.id);n.close()}}catch(e){}});
+ }
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&unseen){unseen=0;document.title=BASE_TITLE}});
+
+/* ---------- Enviar resultado al paciente por WhatsApp Web (un toque) ---------- */
+// En computadora usa WhatsApp Web siempre en la misma pestaña ("numed_whatsapp"), con la sesión del número de la jornada.
+// En celular o tableta abre la app de WhatsApp.
+const isMobileDevice=()=>matchMedia('(pointer:coarse)').matches&&innerWidth<1024;
+function waSendURL(phone,text){let d=String(phone||'').replace(/\D/g,'');if(d.length===10)d='1'+d;if(!d)return '';const q=text?encodeURIComponent(text):'';return isMobileDevice()?`https://wa.me/${d}${q?'?text='+q:''}`:`https://web.whatsapp.com/send?phone=${d}${q?'&text='+q:''}`}
+function openWA(url){if(!url)return;const w=window.open(url,'numed_whatsapp');if(!w)toast('El navegador bloqueó la pestaña de WhatsApp. Permite ventanas emergentes para este sitio.',{ms:6000});else try{w.focus()}catch(e){}}
+function waPatientText(r){
+ const c=resultCopy(r),extra=r.level==='Bajo'?'Si tienes alguna pregunta, puedes responder a este mensaje.':'Si lo deseas, te ayudamos a agendar una valoración: solo responde a este mensaje.';
+ return [`Hola ${r.first}, te saluda el ${NUMED_FIRMA}.`,'',`Gracias por completar la evaluación de *Estrés Percibido (PSS-10)*${r.empresa?` en la jornada de ${r.empresa}`:''}. Aquí tienes tu resultado:`,'',`*${r.score}/40 · ${c.title}*`,'',c.intro,'','*Recomendaciones para ti:*',...c.recs.slice(0,5).map((x,i)=>`${i+1}. ${x}`),'',`*Seguimiento:* ${c.follow}`,'',extra,'','_Este resultado es un tamizaje y no constituye un diagnóstico médico._'].join('\n');
+}
+function sendResultWA(id){
+ const r=inboxRows.find(x=>x.id===id);if(!r)return;const d=waLink(r.phone);
+ if(!d){toast('Este paciente no tiene un celular válido.');return}
+ openWA(waSendURL(r.phone,waPatientText(r)));
+ if(r.seg==='Enviado'||r.seg==='Cerrado')return;
+ const prev={seg:r.seg,notes:r.notes},stamp=new Date().toLocaleString('es-DO',{day:'2-digit',month:'2-digit',hour:'numeric',minute:'2-digit'});
+ const notes=(r.notes?r.notes+'\n':'')+`• Resultado enviado por WhatsApp (${stamp})`;
+ updateFollowUp(id,'Enviado',notes).then(upd=>{const i=inboxRows.findIndex(x=>x.id===id);if(i>-1)inboxRows[i]=upd;paintInbox();renderKPIs();if($('#drawer').classList.contains('on'))openDrawer(id);
+  toast(`${r.first} ${r.last} marcado como Enviado`,{ms:7000,action:{label:'Deshacer',fn:()=>updateFollowUp(id,prev.seg,prev.notes).then(u=>{const j=inboxRows.findIndex(x=>x.id===id);if(j>-1)inboxRows[j]=u;paintInbox();renderKPIs();if($('#drawer').classList.contains('on'))openDrawer(id)}).catch(()=>toast('No se pudo deshacer.'))}})
+ }).catch(err=>{console.error(err);toast('Se abrió WhatsApp, pero no se pudo marcar como Enviado. Márcalo en el seguimiento.')});
+}
 function stopPoll(){clearInterval(pollTimer);pollTimer=null}
 function fillEmpresas(){
  const list=[...new Set(inboxRows.map(r=>r.empresa).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
@@ -434,7 +490,7 @@ function openDrawer(id){
  <div class="d-data"><div><small>Cédula</small><b>${esc(r.idNumber)}</b></div><div><small>Celular</small><b>${esc(r.phone)}</b></div><div><small>Nacimiento</small><b>${formatBirthDate(r.birthDate)}</b></div><div><small>Edad</small><b>${esc(r.age)} años</b></div><div><small>Empresa / campaña</small><b>${esc(r.empresa||'—')}</b></div><div><small>Consentimiento</small><b>${r.consent?'Aceptado':'No registrado'}</b></div></div>
  ${followHTML(r)}
  <h4 style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Respuestas</h4><div class="answers">${qs.map((_,i)=>{const n=i+1,v=r.answers['pss_'+n];return `<div class="ans"><span class="n">P${n}</span><p>${esc(qText(i))}<em>${answerLabel(n,v)}</em></p><span class="pts">${v??'—'} pt</span></div>`}).join('')}</div></div>
- <div class="d-foot"><button class="btn primary" type="button" data-pdf="${esc(r.id)}">${ICON.file}Descargar PDF</button>${wa?`<a class="btn ghost" href="${wa}" target="_blank" rel="noopener">${ICON.wa}WhatsApp</a>`:''}</div>`;
+ <div class="d-foot">${wa?`<button class="btn wa" type="button" data-wa="${esc(r.id)}" style="flex-basis:100%">${ICON.wa}${r.seg==='Enviado'||r.seg==='Cerrado'?'Reenviar resultado por WhatsApp':'Enviar resultado por WhatsApp'}</button>`:''}<button class="btn primary" type="button" data-pdf="${esc(r.id)}">${ICON.file}Descargar PDF</button>${wa?`<a class="btn ghost" href="${waSendURL(r.phone,'')}" target="numed_whatsapp">Abrir chat</a>`:''}</div>`;
  $('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#backdrop').classList.add('on');setTimeout(()=>$('.d-close')?.focus(),50);
 }
 function followHTML(r){
@@ -493,6 +549,7 @@ function initHub(){
  $('#preview').onclick=()=>window.open(publicURL(qrEmp),'_blank');$('#downloadQr').onclick=()=>downloadQR(qrEmp);
  $('#openScreen').onclick=$('#navScreen').onclick=()=>window.open(screenURL(qrEmp),'_blank');
  $('#refresh').onclick=()=>auth?loadInbox():openLogin();$('#exportCsv').onclick=exportCSV;$('#reportPdf').onclick=()=>printRiskReport(false);$('#reportPdfAnon').onclick=()=>printRiskReport(true);
+ $('#alertsBtn').onclick=toggleAlerts;$('#waWebBtn').onclick=()=>openWA('https://web.whatsapp.com/');paintAlertsBtn();
  $('#empresaFilter').addEventListener('change',e=>{ui.empresa=e.target.value;renderKPIs();paintInbox();renderRiskReport()});
  $('#segFilter').addEventListener('change',e=>{ui.seg=e.target.value;paintInbox()});
  $('#empresaFilter').hidden=true;
@@ -500,6 +557,8 @@ function initHub(){
  $('#chips').addEventListener('click',e=>{const b=e.target.closest('[data-level]');if(b){ui.level=b.dataset.level;paintInbox()}});
  document.addEventListener('click',e=>{
   const pdf=e.target.closest('[data-pdf]');if(pdf){e.stopPropagation();printResult(pdf.dataset.pdf);return}
+  const wab=e.target.closest('[data-wa]');if(wab){e.stopPropagation();sendResultWA(wab.dataset.wa);return}
+  const kp=e.target.closest('[data-kpi=pend]');if(kp){ui.seg='Pendiente';$('#segFilter').value='Pendiente';paintInbox();$('#inbox').scrollIntoView({behavior:'smooth',block:'start'});return}
   const act=e.target.closest('[data-action]');if(act){const a=act.dataset.action;if(a==='login')openLogin();if(a==='retry')loadInbox();if(a==='close')closeDrawer();if(a==='clear'){ui.level='all';ui.seg='';$('#segFilter').value='';$('#patientSearch').value='';paintInbox()}return}
   const sb=e.target.closest('[data-seg]');if(sb){$$('.fu-states button').forEach(b=>{const on=b===sb;b.className=on?'on seg-'+b.dataset.seg:'';b.setAttribute('aria-checked',on)});return}
   const sv=e.target.closest('[data-save]');if(sv){saveFollowUp(sv.dataset.save,sv);return}
@@ -557,7 +616,7 @@ function dataHTML(){
  <div class="step-foot"><button class="btn primary lg block" type="submit">Continuar ${ARROW}</button></div></form>`;
 }
 function consentHTML(){
- return `<div class="field full" data-f="consent"><label class="consent${P.F.consent?' on':''}" for="consent"><input type="checkbox" id="consent"${P.F.consent?' checked':''}><span class="box">${ICON.check}</span><span class="txt">Acepto que NUMED use mis datos y respuestas para fines de evaluación y seguimiento de mi salud.</span></label><span class="err"></span><details class="privacy"><summary>Ver aviso de privacidad</summary><p>Tus datos (nombre, cédula, contacto, fecha de nacimiento y respuestas) se usan para calcular tu resultado, darte recomendaciones y, si corresponde, contactarte para seguimiento. Se guardan de forma segura y solo los consulta el personal autorizado de NUMED. Si participas a través de tu empresa o institución, esta solo recibe resultados agregados del grupo, sin datos individuales. Puedes pedir la corrección o eliminación de tus datos escribiendo a NUMED.</p></details></div>`;
+ return `<div class="field full" data-f="consent"><label class="consent${P.F.consent?' on':''}" for="consent"><input type="checkbox" id="consent"${P.F.consent?' checked':''}><span class="box">${ICON.check}</span><span class="txt">Acepto que NUMED use mis datos y respuestas para fines de evaluación y seguimiento de mi salud.</span></label><span class="err"></span><details class="privacy"><summary>Ver aviso de privacidad</summary><p>Tus datos (nombre, cédula, contacto, fecha de nacimiento y respuestas) se usan para calcular tu resultado, darte recomendaciones y, si corresponde, contactarte para seguimiento (también por WhatsApp). Se guardan de forma segura y solo los consulta el personal autorizado de NUMED. Si participas a través de tu empresa o institución, esta solo recibe resultados agregados del grupo, sin datos individuales. Puedes pedir la corrección o eliminación de tus datos escribiendo a NUMED.</p></details></div>`;
 }
 function validateData(){
  const F=P.F,e={},ced=F.idNumber.trim();
