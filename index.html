@@ -86,31 +86,60 @@ tr.is-new td{animation:newrow 2.6s var(--ease)}@keyframes newrow{0%,30%{backgrou
 /* fields */
 .field{display:flex;flex-direction:column;gap:6px}label{font-size:12px;color:#3f5565;font-weight:700}
 input{width:100%;height:48px;border:1.5px solid #d7e2e7;border-radius:12px;padding:0 14px;font:inherit;font-size:15px;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s}input:focus{outline:none;border-color:var(--navy-700);box-shadow:0 0 0 4px rgba(28,88,127,.12)}input[readonly]{background:var(--bg);color:var(--muted)}
-/* ===== PUBLIC FORM ===== */
-.pub{min-height:100vh;padding-bottom:60px;background:radial-gradient(1200px 400px at 50% -120px,#dfeaf1,transparent),var(--bg)}
-.shell-sm{width:min(720px,calc(100% - 24px));margin:auto}
-.pub-progress{position:sticky;top:0;z-index:15;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 0}.pp-row{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--navy-800);margin-bottom:6px}.pp-bar{height:7px;border-radius:9px;background:var(--line-2);overflow:hidden}.pp-bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--navy-700),var(--green-500));transition:width .4s var(--ease)}
-.pub-head{margin:16px 0 14px;overflow:hidden;position:relative}.pub-head:after{content:"";position:absolute;right:-50px;top:-60px;width:170px;height:170px;border-radius:50%;border:22px solid rgba(154,198,59,.12)}
-.pub-head h1{font-size:clamp(26px,6vw,34px);margin:16px 0 6px;color:var(--navy-950);font-weight:900;line-height:1.08}.pub-head p{margin:0;color:var(--muted)}
-.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--navy-800);background:var(--navy-100);border-radius:999px;padding:5px 10px}.pill svg{width:13px;height:13px}
-.sec-title{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--navy-900);font-size:16px;margin-bottom:16px}.sec-title b{width:28px;height:28px;border-radius:9px;background:var(--navy-800);color:#fff;display:grid;place-items:center;font-size:12px}
-.pub form>.card{margin-bottom:14px}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.note{background:#eef6fa;border-left:4px solid var(--navy-700);padding:12px 14px;border-radius:10px;color:#46606f;font-size:12.5px;margin-bottom:16px}
-.questions{display:grid;gap:12px}
-.question{background:#f7fafb;border:1.5px solid #e4ecef;border-radius:16px;padding:16px;transition:border-color .25s,background .25s,box-shadow .25s;scroll-margin-top:90px}
-.question.done{background:#fff;border-color:#d3e6b4}.question.missing{border-color:var(--red-500);box-shadow:0 0 0 4px rgba(201,75,75,.12);animation:shake .4s}
+/* ===== PUBLIC FORM (wizard) ===== */
+.pub{min-height:100vh;min-height:100dvh;background:linear-gradient(180deg,#e8f0f4,#f4f7f9 45%);position:relative;overflow-x:hidden}
+.pub-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}.po{position:absolute;border-radius:50%;filter:blur(60px);animation:float 16s ease-in-out infinite}.po.a{width:320px;height:320px;background:rgba(154,198,59,.28);top:-120px;right:-100px}.po.b{width:360px;height:360px;background:rgba(28,88,127,.16);bottom:-160px;left:-140px;animation-delay:-7s}
+.pub-app{position:relative;z-index:1;width:min(560px,100%);margin:auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:0 16px calc(18px + env(safe-area-inset-bottom))}
+.pub-bar{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:40px 1fr 44px;align-items:center;gap:12px;padding:14px 0 12px;background:linear-gradient(#e8f0f4 72%,rgba(232,240,244,0))}
+.pb-back{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--navy-800);display:grid;place-items:center;cursor:pointer;transition:transform .15s}.pb-back:active{transform:scale(.92)}.pb-back svg{width:20px;height:20px}
+.pb-label{font-size:12px;font-weight:800;color:var(--navy-800);margin-bottom:6px}.pb-segs{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}.pb-segs i{height:6px;border-radius:9px;background:#d5e1e8;transition:background .35s,transform .35s}.pb-segs i.on{background:linear-gradient(90deg,var(--navy-700),var(--green-500))}.pb-segs i.cur{background:var(--navy-800);transform:scaleY(1.5)}
+.pb-count{font-size:12px;font-weight:800;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.pub-stage{flex:1;display:flex;flex-direction:column}
+.step{flex:1;display:flex;flex-direction:column;animation:stepIn .45s var(--ease) both}.step.back{animation-name:stepBack}
+@keyframes stepIn{from{opacity:0;transform:translateX(44px)}}@keyframes stepBack{from{opacity:0;transform:translateX(-44px)}}
+.stagger>*{animation:rise2 .5s var(--ease) both}.stagger>*:nth-child(2){animation-delay:.06s}.stagger>*:nth-child(3){animation-delay:.12s}.stagger>*:nth-child(4){animation-delay:.18s}.stagger>*:nth-child(5){animation-delay:.24s}.stagger>*:nth-child(6){animation-delay:.3s}.stagger>*:nth-child(7){animation-delay:.36s}.stagger>*:nth-child(8){animation-delay:.42s}
+@keyframes rise2{from{opacity:0;transform:translateY(16px)}}
+.welcome{margin:16px 0 4px;flex:1;border-radius:28px;background:radial-gradient(420px 320px at 100% 0,rgba(154,198,59,.32),transparent 60%),linear-gradient(160deg,#06223a,#123d63 60%,#1c587f);color:#fff;padding:20px 20px 22px;display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(6,34,58,.6)}
+.wl-logos{display:inline-flex;align-self:flex-start;gap:12px;align-items:center;background:#fff;border-radius:14px;padding:8px 12px;position:relative;z-index:1}.wl-logos img{height:34px;max-width:110px;object-fit:contain;display:block}.wl-logos span{width:1px;height:26px;background:var(--line)}
+.wl-rings{position:absolute;right:-80px;top:70px;width:270px;height:270px}.wl-rings i{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(154,198,59,.35);animation:ringOut 3.6s var(--ease) infinite}.wl-rings i:nth-child(2){animation-delay:1.2s}.wl-rings i:nth-child(3){animation-delay:2.4s}
+.wl-body{margin-top:auto;position:relative;padding-top:70px}
+.welcome h1{font-size:clamp(34px,10vw,46px);line-height:1.02;margin:10px 0 12px;font-weight:900;letter-spacing:-.035em}.welcome h1 .hl{background:linear-gradient(90deg,#9ac63b,#d6f08f,#9ac63b);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+.welcome p{color:#c6d7e2;margin:0 0 18px;font-size:15px}
+.wl-feats{display:grid;gap:8px;margin-bottom:20px}.wl-feats div{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 12px;font-size:14px;font-weight:600}.wl-feats b{width:32px;height:32px;border-radius:10px;background:rgba(154,198,59,.18);color:var(--green-500);display:grid;place-items:center;flex:none}.wl-feats svg{width:17px;height:17px}
+.btn.go{background:var(--green-500);color:var(--navy-950);font-size:16px;padding:16px 22px;box-shadow:0 14px 30px -12px rgba(111,162,31,.85)}.btn.go:hover{background:#aad451}.btn.go svg{width:18px;height:18px;transition:transform .2s}.btn.go:hover svg{transform:translateX(3px)}.btn.go[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn.link{background:transparent;color:#c6d7e2;text-decoration:underline;padding:12px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow)}
+.step h2{font-size:26px;line-height:1.12;margin:0 0 6px;color:var(--navy-950);font-weight:900;letter-spacing:-.03em}.step .lead{color:var(--muted);margin:0 0 18px;font-size:14px}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.f-grid .full{grid-column:1/-1}
+.field .err{font-size:11.5px;color:var(--red-700);font-weight:600}.field .err:empty{display:none}.field.bad input{border-color:var(--red-500);background:#fffafa;animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.qtop{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}.qnum{display:grid;place-items:center;flex:0 0 32px;height:32px;border-radius:10px;background:var(--navy-800);color:#fff;font-size:11px;font-weight:900;transition:background .25s}.question.done .qnum{background:var(--green-600)}.qcopy{font-size:14px;color:var(--navy-900);font-weight:700;padding-top:5px;line-height:1.4}
-.options{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.radio{position:relative;cursor:pointer}.radio input{position:absolute;opacity:0;pointer-events:none}
-.radio span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;padding:8px 6px;background:#fff;border:1.5px solid #d4e0e5;border-radius:12px;color:#55697a;font-size:12px;font-weight:700;line-height:1.2;transition:all .18s var(--ease)}
-.radio:hover span{border-color:#b6c9d3}.radio input:checked+span{border-color:var(--green-600);background:var(--green-100);color:var(--navy-900);box-shadow:0 0 0 3px rgba(154,198,59,.22);transform:translateY(-1px)}.radio input:focus-visible+span{outline:3px solid rgba(28,88,127,.35)}
-.fine{text-align:center;font-size:11.5px;color:var(--muted);margin-top:10px;display:flex;justify-content:center;align-items:center;gap:6px}.fine svg{width:13px;height:13px}
-.thanks{text-align:center;margin-top:16px;padding:28px 22px;animation:pop .45s var(--ease)}
-.result-ring{width:170px;height:170px;margin:6px auto 10px;position:relative}.result-ring svg{width:100%;height:100%}.result-ring .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}.result-ring .val strong{display:block;font-size:44px;font-weight:900;line-height:1;color:var(--navy-950);font-variant-numeric:tabular-nums}.result-ring .val span{font-size:12px;color:var(--muted)}
-.thanks h2{margin:6px 0;font-size:24px;color:var(--navy-950)}.thanks .intro{color:#4f6877;font-size:14px;max-width:520px;margin:0 auto 18px}
-.recs-mini{text-align:left;display:grid;gap:8px;margin:0 0 18px}.recs-mini div{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:10px 12px;font-size:13px;color:#3f5869}.recs-mini b{flex:none;width:22px;height:22px;border-radius:7px;background:var(--green-100);color:var(--navy-800);display:grid;place-items:center;font-size:10.5px}
-.checkmark{width:54px;height:54px;border-radius:50%;background:var(--green-100);color:var(--green-700);display:grid;place-items:center;margin:0 auto 8px}.checkmark svg{width:28px;height:28px}
+.age-chip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:var(--green-100);color:var(--green-700);font-weight:800;font-size:12.5px;padding:5px 11px;border-radius:999px;animation:pop .3s var(--ease)}.age-chip svg{width:14px;height:14px}
+.step-foot{position:sticky;bottom:0;padding:16px 0 4px;margin-top:auto;background:linear-gradient(rgba(244,247,249,0),#f4f7f9 35%)}
+.q-kicker{display:inline-flex;align-self:flex-start;gap:8px;align-items:center;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green-700);background:var(--green-100);padding:5px 11px;border-radius:999px;margin:8px 0 14px}
+.step h2.q-title{font-size:clamp(23px,6.4vw,30px)}
+.q-opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:grid;grid-template-columns:40px 1fr 26px;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:2px solid #dde7ec;border-radius:18px;padding:15px 16px;cursor:pointer;font-size:16px;font-weight:700;color:var(--navy-900);transition:transform .18s var(--ease),border-color .2s,background .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.opt:hover{border-color:#bcd0da;transform:translateY(-1px)}.opt:active{transform:scale(.98)}
+.meter{display:flex;align-items:flex-end;gap:3px;height:24px}.meter i{width:6px;border-radius:3px;background:#dde7ec;transition:background .25s}.meter i:nth-child(1){height:30%}.meter i:nth-child(2){height:55%}.meter i:nth-child(3){height:78%}.meter i:nth-child(4){height:100%}.meter i.f{background:var(--navy-700)}
+.opt .ck{width:26px;height:26px;border-radius:50%;border:2px solid #d4e0e5;display:grid;place-items:center;color:#fff;transition:all .2s}.opt .ck svg{width:15px;height:15px;opacity:0;transform:scale(.4);transition:all .2s var(--ease)}
+.opt.sel{border-color:var(--green-600);background:var(--green-100);box-shadow:0 10px 24px -14px rgba(111,162,31,.8);animation:sel .35s var(--ease)}.opt.sel .ck{background:var(--green-600);border-color:var(--green-600)}.opt.sel .ck svg{opacity:1;transform:none}.opt.sel .meter i.f{background:var(--green-600)}
+@keyframes sel{40%{transform:scale(1.025)}}
+.q-hint{text-align:center;color:var(--muted);font-size:12px;margin-top:16px}.kbd{display:none}@media(hover:hover) and (pointer:fine){.kbd{display:inline}}
+.rv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rv{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;transition:border-color .2s,transform .15s}.rv:hover{border-color:var(--navy-700);transform:translateY(-1px)}.rv b{width:28px;height:28px;border-radius:9px;background:var(--navy-800);color:#fff;font-size:11px;display:grid;place-items:center;flex:none}.rv span{font-size:12.5px;font-weight:700;color:var(--navy-900);line-height:1.25}.rv small{display:block;font-weight:500;color:var(--muted);font-size:10.5px}.rv.miss{border-color:var(--red-500);background:#fffafa}.rv.miss b{background:var(--red-500)}
+.big-check{width:72px;height:72px;border-radius:50%;background:var(--green-100);color:var(--green-700);display:grid;place-items:center;margin:12px 0 14px}.big-check svg{width:36px;height:36px;stroke-dasharray:30;stroke-dashoffset:30;animation:draw .6s .3s forwards}@keyframes draw{to{stroke-dashoffset:0}}
+.sending{flex:1;display:grid;place-items:center;text-align:center;padding:40px 10px}.loader{width:84px;height:84px;border-radius:50%;border:6px solid #dbe6ec;border-top-color:var(--green-600);border-right-color:var(--navy-700);animation:spin 1s linear infinite;margin:0 auto 20px}@keyframes spin{to{transform:rotate(360deg)}}
+.sending p{color:var(--muted);transition:opacity .3s}
+.res-hero{margin:16px 0 0;border-radius:28px;padding:22px 20px 24px;text-align:center;color:#fff;position:relative;overflow:hidden;background:linear-gradient(160deg,#06223a,#123d63)}
+.res-hero:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle at 50% 32%,var(--glow),transparent 42%);opacity:.5;animation:float 10s ease-in-out infinite}.res-hero>*{position:relative}
+.result-ring{width:180px;height:180px;margin:10px auto 12px;position:relative}.result-ring svg{width:100%;height:100%}.result-ring .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}.result-ring .val strong{display:block;font-size:54px;font-weight:900;line-height:1;color:#fff;font-variant-numeric:tabular-nums}.result-ring .val span{font-size:12px;color:#b9cdda}
+.scale{display:flex;gap:4px;max-width:290px;margin:0 auto 14px}.scale div{flex:1;font-size:10.5px;padding:6px 0;border-radius:9px;background:rgba(255,255,255,.08);color:#9fb6c5;font-weight:800;line-height:1.2}.scale div small{display:block;font-weight:600;opacity:.8}.scale div.on{background:var(--glow);color:#fff;transform:scale(1.06)}
+.res-hero h2{color:#fff;font-size:26px;margin:4px 0 8px}.res-hero p{color:#c6d7e2;font-size:14px;margin:0}
+.sec-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:var(--muted);margin:20px 0 10px}
+.recs-list{display:grid;gap:8px}.recs-list div{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13.5px;color:#3f5869;animation:rise2 .5s var(--ease) both}.recs-list b{flex:none;width:26px;height:26px;border-radius:8px;background:var(--green-100);color:var(--green-700);display:grid;place-items:center;font-size:11px}
+.follow-box{margin:14px 0;padding:14px 16px;border-radius:14px;border-left:4px solid var(--accent);background:var(--soft);font-size:13px;color:#294a5e}
+.disclaimer{font-size:11.5px;color:var(--muted);text-align:center;margin:12px 0 4px}
+.p-confetti{position:fixed;top:-20px;width:9px;height:14px;border-radius:2px;z-index:50;animation:fall linear forwards;pointer-events:none}
+@media(max-width:380px){.f-grid,.rv-grid{grid-template-columns:1fr}}
 /* ===== SCREEN MODE ===== */
 .screen{position:fixed;inset:0;overflow:hidden;color:#fff;background:radial-gradient(1200px 800px at 85% 10%,#1c587f 0%,transparent 60%),radial-gradient(900px 700px at 0% 100%,#0f4a3d 0%,transparent 55%),linear-gradient(160deg,#06223a,#0b3152 55%,#06223a);font-size:clamp(14px,1.05vw,24px)}
 .screen.hide-cursor{cursor:none}
@@ -190,16 +219,10 @@ input{width:100%;height:48px;border:1.5px solid #d7e2e7;border-radius:12px;paddi
 
 <!-- ================= FORMULARIO PÚBLICO ================= -->
 <div id="public" class="pub" hidden>
-<div class="pub-progress" id="pubProgress"><div class="shell-sm"><div class="pp-row"><span id="ppText">0 de 10 preguntas respondidas</span><span id="ppPct">0%</span></div><div class="pp-bar"><i id="ppBar"></i></div></div></div>
-<div class="shell-sm">
-<header class="card pub-head"><div class="brand"><img class="numed-logo" src="logo-numed.png" alt="NUMED"><span class="brand-divider" aria-hidden="true"></span><img class="acsm-logo" src="logo-acsm.jpeg" alt="ACSM Exercise is Medicine Dominican Republic"></div><h1>Estrés percibido</h1><p>Completa tus datos y responde cómo te has sentido durante el último mes.</p>
-<div class="pills"><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>2 minutos</span><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>10 preguntas</span><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidencial</span></div></header>
-<form id="form"><section class="card"><div class="sec-title"><b>1</b>Tus datos</div><div class="fields"><div class="field"><label for="first">Nombre</label><input id="first" required autocomplete="given-name"></div><div class="field"><label for="last">Apellido</label><input id="last" required autocomplete="family-name"></div><div class="field"><label for="idNumber">Cédula</label><input id="idNumber" required inputmode="numeric" autocomplete="off" placeholder="000-0000000-0"></div><div class="field"><label for="phone">Número de celular</label><input id="phone" required type="tel" autocomplete="tel" placeholder="809-000-0000"></div><div class="field"><label for="birthDate">Fecha de nacimiento</label><input id="birthDate" required type="date" autocomplete="bday"></div><div class="field"><label for="age">Edad</label><input id="age" required type="number" min="1" max="120" inputmode="numeric" readonly placeholder="Se calcula sola"></div></div></section>
-<section class="card"><div class="sec-title"><b>2</b>Cuestionario PSS-10</div><div class="note">Responde pensando en tus sentimientos y pensamientos <strong>durante el último mes</strong>. No hay respuestas correctas ni incorrectas.</div><div class="questions" id="questions"></div></section>
-<div class="form-error" id="formError" hidden></div>
-<button class="btn primary lg block" type="submit" id="submitBtn">Enviar cuestionario</button>
-<p class="fine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Tus respuestas son confidenciales y solo las revisa el equipo de NUMED.</p></form>
-<section class="card thanks" id="thanks" hidden></section>
+<div class="pub-bg"><span class="po a"></span><span class="po b"></span></div>
+<div class="pub-app">
+<header class="pub-bar" id="pubBar" hidden><button class="pb-back" id="pbBack" type="button" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><div><div class="pb-label" id="pbLabel"></div><div class="pb-segs" id="pbSegs"></div></div><div class="pb-count" id="pbCount"></div></header>
+<main class="pub-stage" id="stage" aria-live="polite"></main>
 </div></div>
 
 <!-- ================= MODO PANTALLA ================= -->
@@ -425,35 +448,126 @@ function initHub(){
  renderAll();if(auth)loadInbox();
 }
 
-/* ================= FORMULARIO PÚBLICO ================= */
+/* ================= FORMULARIO PÚBLICO (paso a paso) ================= */
 let publicRows=[];
-function initPublic(){
- $('#public').hidden=false;
- $('#questions').innerHTML=qs.map((q,i)=>{const n=i+1;return `<div class="question" id="q${n}" data-n="${n}"><div class="qtop"><span class="qnum">${n}</span><div class="qcopy">${esc(qText(i))}</div></div><div class="options" role="radiogroup" aria-label="Pregunta ${n}">${opts.map((o,v)=>`<label class="radio"><input type="radio" name="pss_${n}" value="${positive.has(n)?4-v:v}"><span>${o}</span></label>`).join('')}</div></div>`}).join('');
- const birth=$('#birthDate');birth.max=new Date().toISOString().slice(0,10);birth.addEventListener('change',()=>{$('#age').value=calculateAge(birth.value)});
- const progress=()=>{const done=$$('.question').filter(q=>q.querySelector('input:checked')).length;$('#ppText').textContent=`${done} de 10 preguntas respondidas`;$('#ppPct').textContent=done*10+'%';$('#ppBar').style.width=done*10+'%'};
- $('#questions').addEventListener('change',e=>{const q=e.target.closest('.question');if(!q)return;const first=!q.classList.contains('done');q.classList.add('done');q.classList.remove('missing');progress();if(first){const next=$$('.question').find(x=>!x.classList.contains('done'));if(next&&Number(next.dataset.n)===Number(q.dataset.n)+1)setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'center'}),220)}});
- $('#form').onsubmit=async e=>{
-  e.preventDefault();const err=$('#formError');err.hidden=true;
-  const answers={};let missing=null;
-  for(let i=1;i<=10;i++){const x=$(`input[name="pss_${i}"]:checked`);if(!x){const q=$('#q'+i);q.classList.remove('missing');void q.offsetWidth;q.classList.add('missing');missing=missing||q}else answers['pss_'+i]=Number(x.value)}
-  if(missing){err.textContent='Faltan preguntas por responder. Las marcamos en rojo.';err.hidden=false;missing.scrollIntoView({behavior:'smooth',block:'center'});return}
-  const score=Object.values(answers).reduce((a,v)=>a+v,0);
-  const r={first:$('#first').value.trim(),last:$('#last').value.trim(),idNumber:$('#idNumber').value.trim(),birthDate:$('#birthDate').value,age:$('#age').value.trim(),phone:$('#phone').value.trim(),answers,score,level:level(score),createdAt:new Date().toISOString(),status:'Realizado'};
-  const btn=$('#submitBtn');btn.disabled=true;btn.textContent='Enviando…';
-  try{await insertEvaluation(r);r.id='local-'+Date.now();publicRows=[r];showThanks(r)}
-  catch(ex){console.error(ex);err.textContent='No pudimos enviar tu cuestionario. Revisa tu conexión e inténtalo de nuevo. Tus respuestas siguen aquí.';err.hidden=false;err.scrollIntoView({behavior:'smooth',block:'center'})}
-  finally{btn.disabled=false;btn.textContent='Enviar cuestionario'}
- };
+const blankF=()=>({first:'',last:'',idNumber:'',phone:'',birthDate:'',age:'',answers:{}});
+const P={step:0,dir:1,editing:false,F:blankF(),result:null,sendError:false,t:null};
+const DRAFT='numed_pss_draft';
+const saveDraft=()=>{try{localStorage.setItem(DRAFT,JSON.stringify({F:P.F,step:P.step,t:Date.now()}))}catch(e){}};
+const loadDraft=()=>{try{const d=JSON.parse(localStorage.getItem(DRAFT)||'null');if(d&&d.F&&Date.now()-d.t<1728e5)return d}catch(e){}return null};
+const clearDraft=()=>{try{localStorage.removeItem(DRAFT)}catch(e){}};
+const answeredCount=()=>Object.keys(P.F.answers).length;
+const shortQ=['Imprevistos','Sentir falta de control','Nervios o estrés','Manejar tus problemas','Las cosas van bien','No poder con todo','Controlar dificultades','Todo bajo control','Enfado','Dificultades acumuladas'];
+const ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const SV={clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',bars:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 20v-6M12 20V8M18 20V4"/></svg>',lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>'};
+function maskCedula(v){if(/[a-z]/i.test(v))return v;const d=v.replace(/\D/g,'').slice(0,11);return [d.slice(0,3),d.slice(3,10),d.slice(10)].filter(Boolean).join('-')}
+function maskPhone(v){if(/[a-z+]/i.test(v))return v;const d=v.replace(/\D/g,'').slice(0,10);return [d.slice(0,3),d.slice(3,6),d.slice(6)].filter(Boolean).join('-')}
+const ageChip=a=>`<span class="age-chip">${ICON.check}${a} años</span>`;
+
+function go(step,dir=1){clearTimeout(P.t);P.step=step;P.dir=dir;renderPub();if(step>=1&&step<=12)saveDraft();window.scrollTo({top:0})}
+function updateBar(){
+ const s=P.step,bar=$('#pubBar');bar.hidden=!(s>=1&&s<=12);if(bar.hidden)return;
+ $('#pbLabel').textContent=s===1?'Tus datos':s===12?'Revisión final':`Pregunta ${s-1} de 10`;
+ $('#pbCount').textContent=answeredCount()*10+'%';
+ $('#pbSegs').innerHTML=Array.from({length:11},(_,k)=>{const on=k===0?s>1:P.F.answers['pss_'+k]!=null;const cur=(s===1&&k===0)||(s>=2&&s<=11&&k===s-1);return `<i class="${on?'on':''}${cur?' cur':''}"></i>`}).join('');
 }
-function showThanks(r){
- const c=resultCopy(r),lv=LV[r.level];$('#form').hidden=true;$('#pubProgress').hidden=true;
- const t=$('#thanks');t.hidden=false;
- t.innerHTML=`<div class="checkmark">${ICON.check}</div><div class="eyebrow">Cuestionario enviado</div><div class="result-ring">${ringSVG(0,lv.color,9)}<div class="val"><div><strong id="countUp">0</strong><span>de 40 puntos</span></div></div></div><span class="badge ${lv.cls}">Estrés ${r.level}</span><h2>${c.title}</h2><p class="intro">${c.intro}</p><div class="recs-mini">${c.recs.slice(0,4).map((x,i)=>`<div><b>${i+1}</b>${x}</div>`).join('')}</div><button class="btn primary lg block" type="button" id="dlPdf">${ICON.file}Descargar resultado completo en PDF</button><p class="fine">${c.follow}</p>`;
- $('#dlPdf').onclick=()=>printResult(r.id,publicRows);
- window.scrollTo({top:0,behavior:'smooth'});
- const R=50-9/2-1,C=2*Math.PI*R;requestAnimationFrame(()=>setTimeout(()=>{t.querySelector('.ring-val').setAttribute('stroke-dasharray',`${C*r.score/40} ${C}`)},120));
- const start=performance.now();const tick=now=>{const p=Math.min((now-start)/1200,1);$('#countUp').textContent=Math.round(r.score*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick)};requestAnimationFrame(tick);
+function renderPub(){
+ const s=P.step;updateBar();
+ const html=s===0?welcomeHTML():s===1?dataHTML():s<=11?questionHTML(s-2):s===12?reviewHTML():s===13?sendingHTML():resultHTML();
+ $('#stage').innerHTML=`<section class="step${P.dir<0?' back':''}">${html}</section>`;
+ if(s===13&&!P.sendError){const msgs=['Calculando tu puntaje…','Analizando tus respuestas…','Preparando tus recomendaciones…'];let i=0;const el=$('#sendMsg');P.t=setInterval(()=>{if(!el.isConnected){clearInterval(P.t);return}i=(i+1)%msgs.length;el.textContent=msgs[i]},700)}
+ if(s===14)animateResult();
+}
+function welcomeHTML(){
+ const d=loadDraft(),has=d&&(d.F.first||Object.keys(d.F.answers||{}).length);
+ return `<div class="welcome"><div class="wl-rings"><i></i><i></i><i></i></div><div class="wl-logos"><img src="logo-numed.png" alt="NUMED"><span></span><img src="logo-acsm.jpeg" alt="ACSM Exercise is Medicine"></div>
+ <div class="wl-body stagger"><div class="eyebrow" style="color:#cfe6a2">Escala de Estrés Percibido · PSS-10</div><h1>¿Cómo has estado <span class="hl">este mes</span>?</h1><p>Responde 10 preguntas rápidas y descubre tu nivel de estrés percibido, con recomendaciones hechas para ti.</p>
+ <div class="wl-feats"><div><b>${SV.clock}</b>Toma solo 2 minutos</div><div><b>${SV.bars}</b>Resultado inmediato en tu celular</div><div><b>${SV.lock}</b>Confidencial · solo lo revisa NUMED</div></div>
+ <div>${has?`<button class="btn go block" type="button" data-act="resume">Continuar donde lo dejé ${ARROW}</button><button class="btn link block" type="button" data-act="restart">Empezar de nuevo</button>`:`<button class="btn go block" type="button" data-act="start">Comenzar ${ARROW}</button>`}</div></div></div>`;
+}
+function fieldHTML(id,label,attrs,full){return `<div class="field${full?' full':''}" data-f="${id}"><label for="${id}">${label}</label><input id="${id}" ${attrs} value="${esc(P.F[id])}"><span class="err"></span></div>`}
+function dataHTML(){
+ return `<form id="dataForm" class="stagger" novalidate style="display:flex;flex-direction:column;flex:1"><div class="q-kicker">Paso 1 · Tus datos</div><h2>Primero, cuéntanos de ti</h2><p class="lead">Con estos datos identificamos tu resultado.</p>
+ <div class="sheet"><div class="f-grid">${fieldHTML('first','Nombre','autocomplete="given-name" autocapitalize="words" enterkeyhint="next"')}${fieldHTML('last','Apellido','autocomplete="family-name" autocapitalize="words" enterkeyhint="next"')}${fieldHTML('idNumber','Cédula','inputmode="numeric" autocomplete="off" placeholder="000-0000000-0" enterkeyhint="next"',true)}${fieldHTML('phone','Número de celular','type="tel" autocomplete="tel" placeholder="809-000-0000" enterkeyhint="next"',true)}
+ <div class="field full" data-f="birthDate"><label for="birthDate">Fecha de nacimiento</label><input id="birthDate" type="date" autocomplete="bday" max="${new Date().toISOString().slice(0,10)}" value="${esc(P.F.birthDate)}"><span class="err"></span><div id="ageChip">${P.F.age!==''?ageChip(P.F.age):''}</div></div></div></div>
+ <div class="step-foot"><button class="btn primary lg block" type="submit">Continuar ${ARROW}</button></div></form>`;
+}
+function validateData(){
+ const F=P.F,e={},ced=F.idNumber.trim();
+ if(!F.first.trim())e.first='Escribe tu nombre';if(!F.last.trim())e.last='Escribe tu apellido';
+ if(!ced)e.idNumber='Escribe tu cédula';else if(/^[\d-]+$/.test(ced)&&ced.replace(/\D/g,'').length!==11)e.idNumber='La cédula debe tener 11 dígitos';
+ if(F.phone.replace(/\D/g,'').length<10)e.phone='Escribe un número de celular válido';
+ if(!F.birthDate||F.age==='')e.birthDate='Selecciona tu fecha de nacimiento';
+ $$('#dataForm .field').forEach(f=>{const k=f.dataset.f;f.classList.remove('bad');void f.offsetWidth;f.classList.toggle('bad',!!e[k]);f.querySelector('.err').textContent=e[k]||''});
+ const first=Object.keys(e)[0];if(first){$('#'+first).focus();return false}return true;
+}
+function questionHTML(i){
+ const n=i+1,cur=P.F.answers['pss_'+n];
+ return `<div class="q-kicker">Durante el último mes</div><h2 class="q-title">${esc(qs[i])}</h2><div class="q-opts stagger" role="radiogroup" aria-label="Pregunta ${n}">${opts.map((o,v)=>{const val=positive.has(n)?4-v:v,sel=cur!=null&&Number(cur)===val;return `<button type="button" class="opt${sel?' sel':''}" role="radio" aria-checked="${sel}" data-act="opt" data-v="${val}"><span class="meter">${[0,1,2,3].map(k=>`<i class="${k<v?'f':''}"></i>`).join('')}</span><span>${o}</span><span class="ck">${ICON.check}</span></button>`}).join('')}</div><p class="q-hint">Toca una opción y avanzamos solos<span class="kbd"> · o usa las teclas 1 a 5</span></p>`;
+}
+function pickOption(btn){
+ const n=P.step-1;P.F.answers['pss_'+n]=Number(btn.dataset.v);
+ $$('.opt').forEach(b=>{const on=b===btn;b.classList.toggle('sel',on);b.setAttribute('aria-checked',on)});
+ if(navigator.vibrate)try{navigator.vibrate(12)}catch(e){}
+ saveDraft();updateBar();clearTimeout(P.t);
+ P.t=setTimeout(()=>{if(P.editing&&answeredCount()===10){P.editing=false;go(12)}else go(P.step<11?P.step+1:12)},380);
+}
+function reviewHTML(){
+ const missing=qs.filter((_,i)=>P.F.answers['pss_'+(i+1)]==null).length,name=esc((P.F.first||'').trim().split(' ')[0]);
+ return `<div class="stagger" style="display:flex;flex-direction:column;flex:1"><div class="big-check">${ICON.check}</div><h2>¡Listo${name?', '+name:''}!</h2><p class="lead">${missing?`Te ${missing===1?'falta 1 pregunta':'faltan '+missing+' preguntas'}. Tócala para responder.`:'Revisa tus respuestas. Toca cualquiera si quieres cambiarla.'}</p>
+ <div class="rv-grid">${qs.map((_,i)=>{const n=i+1,v=P.F.answers['pss_'+n];return `<button type="button" class="rv${v==null?' miss':''}" data-act="edit" data-q="${n}"><b>${n}</b><span>${v==null?'Sin responder':answerLabel(n,v)}<small>${shortQ[i]}</small></span></button>`}).join('')}</div>
+ <div class="step-foot"><button class="btn go lg block" type="button" data-act="send"${missing?' disabled':''}>Ver mi resultado ${ARROW}</button></div></div>`;
+}
+function sendingHTML(){
+ if(P.sendError)return `<div class="sending"><div><div class="lock" style="margin:0 auto 16px;background:var(--red-100);color:var(--red-700)">${SV.lock}</div><h2>No pudimos enviar tu cuestionario</h2><p>Revisa tu conexión a internet. Tus respuestas siguen guardadas en este teléfono.</p><div style="display:grid;gap:8px;margin-top:18px"><button class="btn primary lg block" type="button" data-act="send">Intentar de nuevo</button><button class="btn ghost block" type="button" data-act="review">Volver a mis respuestas</button></div></div></div>`;
+ return `<div class="sending"><div><div class="loader"></div><h2>Un momento…</h2><p id="sendMsg">Calculando tu puntaje…</p></div></div>`;
+}
+async function sendPub(){
+ const F=P.F,answers={};for(let i=1;i<=10;i++)answers['pss_'+i]=Number(F.answers['pss_'+i]);
+ const score=Object.values(answers).reduce((a,v)=>a+v,0);
+ const r={first:F.first.trim(),last:F.last.trim(),idNumber:F.idNumber.trim(),birthDate:F.birthDate,age:String(F.age),phone:F.phone.trim(),answers,score,level:level(score),createdAt:new Date().toISOString(),status:'Realizado'};
+ P.sendError=false;go(13);const t0=Date.now();
+ try{await insertEvaluation(r);await new Promise(res=>setTimeout(res,Math.max(0,1800-(Date.now()-t0))));r.id='local-'+Date.now();publicRows=[r];P.result=r;clearDraft();clearInterval(P.t);go(14)}
+ catch(e){console.error(e);clearInterval(P.t);P.sendError=true;go(13)}
+}
+function resultHTML(){
+ const r=P.result,c=resultCopy(r),lv=LV[r.level],R=44,C=2*Math.PI*R;
+ return `<div class="res-hero" style="--glow:${lv.color}"><div class="eyebrow" style="color:#cfe6a2">Tu resultado · PSS-10</div>
+ <div class="result-ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="${R}" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="9"/><circle id="resArc" transform="rotate(-90 50 50)" cx="50" cy="50" r="${R}" fill="none" stroke="${lv.color}" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 ${C}" style="transition:stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 6px ${lv.color})"/></svg><div class="val"><div><strong id="countUp">0</strong><span>de 40 puntos</span></div></div></div>
+ <div class="scale">${['Bajo','Moderado','Alto'].map((l,i)=>`<div class="${r.level===l?'on':''}">${l}<small>${['0–13','14–26','27–40'][i]}</small></div>`).join('')}</div>
+ <h2>${c.title}</h2><p>${c.intro}</p></div>
+ <div class="sec-label">Recomendaciones para ti</div><div class="recs-list">${c.recs.map((x,i)=>`<div style="animation-delay:${.7+i*.08}s"><b>${i+1}</b><span>${x}</span></div>`).join('')}</div>
+ <div class="follow-box" style="--accent:${lv.color};--soft:${lv.soft}"><strong>Seguimiento:</strong> ${c.follow}</div>
+ <button class="btn primary lg block" type="button" data-act="pdf">${ICON.file}Descargar mi resultado en PDF</button>
+ <p class="disclaimer">La PSS-10 es un instrumento de tamizaje y no constituye un diagnóstico. Gracias por cuidar tu bienestar con NUMED.</p>`;
+}
+function animateResult(){
+ const r=P.result,C=2*Math.PI*44;
+ setTimeout(()=>{const a=$('#resArc');if(a)a.setAttribute('stroke-dasharray',`${C*r.score/40} ${C}`)},150);
+ const st=performance.now(),tick=now=>{const p=Math.min((now-st)/1400,1),el=$('#countUp');if(!el)return;el.textContent=Math.round(r.score*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(tick)};requestAnimationFrame(tick);
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){const colors=['#9ac63b','#123d63','#d6f08f','#2a7fb0','#f2c14e'];for(let i=0;i<60;i++){const d=document.createElement('i');d.className='p-confetti';d.style.cssText=`left:${Math.random()*100}%;background:${colors[i%5]};animation-duration:${2+Math.random()*1.8}s;animation-delay:${.3+Math.random()*.5}s`;document.body.appendChild(d);setTimeout(()=>d.remove(),5000)}}
+}
+function initPublic(){
+ $('#public').hidden=false;const stage=$('#stage');
+ stage.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const a=b.dataset.act;
+  if(a==='start')go(1);
+  if(a==='resume'){const d=loadDraft();if(d){P.F={...blankF(),...d.F,answers:d.F.answers||{}};go(Math.min(Math.max(d.step||1,1),12))}else go(1)}
+  if(a==='restart'){clearDraft();P.F=blankF();go(1)}
+  if(a==='opt')pickOption(b);
+  if(a==='edit'){P.editing=true;go(Number(b.dataset.q)+1,-1)}
+  if(a==='send')sendPub();
+  if(a==='review'){P.sendError=false;go(12,-1)}
+  if(a==='pdf')printResult(P.result.id,publicRows);
+ });
+ const onInput=e=>{const t=e.target;if(!t.id||!(t.id in P.F)||t.id==='answers')return;
+  if(t.id==='idNumber')t.value=maskCedula(t.value);if(t.id==='phone')t.value=maskPhone(t.value);
+  P.F[t.id]=t.value;if(t.id==='birthDate'){P.F.age=calculateAge(t.value);$('#ageChip').innerHTML=P.F.age!==''?ageChip(P.F.age):''}
+  const f=t.closest('.field');if(f){f.classList.remove('bad');f.querySelector('.err').textContent=''}saveDraft()};
+ stage.addEventListener('input',onInput);stage.addEventListener('change',onInput);
+ stage.addEventListener('submit',e=>{e.preventDefault();if(validateData()){if(P.editing&&answeredCount()===10){P.editing=false;go(12)}else go(2)}});
+ $('#pbBack').onclick=()=>{P.editing=false;const s=P.step;go(s===1?0:s-1,-1)};
+ document.addEventListener('keydown',e=>{if(P.step>=2&&P.step<=11&&/^[1-5]$/.test(e.key)&&!e.target.closest('input')){const b=$$('.opt')[Number(e.key)-1];if(b)pickOption(b)}});
+ go(0);
 }
 
 /* ================= MODO PANTALLA ================= */
